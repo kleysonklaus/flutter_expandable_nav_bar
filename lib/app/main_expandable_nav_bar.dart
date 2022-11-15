@@ -31,6 +31,25 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar> {
           );
         },
       ),
+      extendBody: true,
+      bottomNavigationBar: Stack(
+        children: [
+          Positioned(
+            height: _maxHeight,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(color: _cardColor, child: _buildExpandedContent()),
+          ),
+          // Positioned(
+          //   height: _maxHeight,
+          //   bottom: 40,
+          //   left: 0,
+          //   right: 0,
+          //   child: Container(color: _cardColor, child: _buildExpandedContent()),
+          // ),
+        ],
+      ),
     );
   }
 
