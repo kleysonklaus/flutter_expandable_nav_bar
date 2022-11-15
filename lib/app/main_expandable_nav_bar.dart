@@ -38,94 +38,100 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
     final size = MediaQuery.of(context).size;
     final menuWith = MediaQuery.of(context).size.width * 0.5;
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.primaries[index % Colors.primaries.length],
-              ),
-            ),
-          );
-        },
-      ),
-      extendBody: true,
-      bottomNavigationBar: GestureDetector(
-        onVerticalDragUpdate: _expanded
-            ? (details) {
-                setState(() {
-                  final newHeight = _currentHeight - details.delta.dy;
-                  _controller.value = _currentHeight / _maxHeight;
-                  _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
-                });
-              }
-            : null,
-        onVerticalDragEnd: _expanded
-            ? (details) {
-                if (_currentHeight < (_maxHeight / 2)) {
-                  _controller.reverse();
-                  _expanded = false;
-                } else {
-                  _controller.forward(from: _currentHeight / _maxHeight);
-                  _expanded = true;
-                  _currentHeight = _maxHeight;
-                }
-              }
-            : null,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, snapshot) {
-            // final value = Curves.elasticInOut.transform(_controller.value);
-            final value =
-                const ElasticInOutCurve(0.7).transform(_controller.value);
-            return Stack(
-              children: [
-                Positioned(
-                  height: lerpDouble(_minHeight, _currentHeight, value),
-                  left: lerpDouble(size.width / 2 - menuWith / 2, 0, value),
-                  width: lerpDouble(menuWith, size.width, value),
-                  bottom: lerpDouble(40, 0, value),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: _cardColor,
-                      borderRadius: BorderRadius.vertical(
-                        top: const Radius.circular(20),
-                        bottom: Radius.circular(lerpDouble(20, 0, value) ?? 0),
-                      ),
-                    ),
-                    child: _expanded
-                        ? Opacity(
-                            opacity: _controller.value,
-                            child: _buildExpandedContent(),
-                          )
-                        : _buildMenuContent(),
+      body: Stack(
+        children: [
+          ListView.builder(
+            padding: const EdgeInsets.only(bottom: _minHeight),
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.primaries[index % Colors.primaries.length],
                   ),
                 ),
-                // Positioned(
-                //   height: _minHeight,
-                //   left: size.width / 2 - menuWith / 2,
-                //   width: menuWith,
-                //   bottom: 40,
-                //   child: Container(
-                //     decoration: const BoxDecoration(
-                //       color: Colors.red,
-                //       borderRadius: BorderRadius.vertical(
-                //         top: Radius.circular(20),
-                //         bottom: Radius.circular(20),
-                //       ),
-                //     ),
-                //     child: _buildMenuContent(),
-                //   ),
-                // ),
-              ],
-            );
-          },
-        ),
+              );
+            },
+          ),
+          GestureDetector(
+            onVerticalDragUpdate: _expanded
+                ? (details) {
+                    setState(() {
+                      final newHeight = _currentHeight - details.delta.dy;
+                      _controller.value = _currentHeight / _maxHeight;
+                      _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
+                    });
+                  }
+                : null,
+            onVerticalDragEnd: _expanded
+                ? (details) {
+                    if (_currentHeight < (_maxHeight / 2)) {
+                      _controller.reverse();
+                      _expanded = false;
+                    } else {
+                      _controller.forward(from: _currentHeight / _maxHeight);
+                      _expanded = true;
+                      _currentHeight = _maxHeight;
+                    }
+                  }
+                : null,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, snapshot) {
+                // final value = Curves.elasticInOut.transform(_controller.value);
+                final value =
+                    const ElasticInOutCurve(0.7).transform(_controller.value);
+                return Stack(
+                  children: [
+                    Positioned(
+                      height: lerpDouble(_minHeight, _currentHeight, value),
+                      left: lerpDouble(size.width / 2 - menuWith / 2, 0, value),
+                      width: lerpDouble(menuWith, size.width, value),
+                      bottom: lerpDouble(40, 0, value),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _cardColor,
+                          borderRadius: BorderRadius.vertical(
+                            top: const Radius.circular(20),
+                            bottom:
+                                Radius.circular(lerpDouble(20, 0, value) ?? 0),
+                          ),
+                        ),
+                        child: _expanded
+                            ? Opacity(
+                                opacity: _controller.value,
+                                child: _buildExpandedContent(),
+                              )
+                            : _buildMenuContent(),
+                      ),
+                    ),
+                    // Positioned(
+                    //   height: _minHeight,
+                    //   left: size.width / 2 - menuWith / 2,
+                    //   width: menuWith,
+                    //   bottom: 40,
+                    //   child: Container(
+                    //     decoration: const BoxDecoration(
+                    //       color: Colors.red,
+                    //       borderRadius: BorderRadius.vertical(
+                    //         top: Radius.circular(20),
+                    //         bottom: Radius.circular(20),
+                    //       ),
+                    //     ),
+                    //     child: _buildMenuContent(),
+                    //   ),
+                    // ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
+      extendBody: true,
     );
   }
 
