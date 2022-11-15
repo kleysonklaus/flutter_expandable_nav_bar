@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 const _cardColor = Color(0xFF5F40FB);
@@ -12,7 +14,24 @@ class MainExpandableNavBar extends StatefulWidget {
   State<MainExpandableNavBar> createState() => MainExpandableNavBarState();
 }
 
-class MainExpandableNavBarState extends State<MainExpandableNavBar> {
+class MainExpandableNavBarState extends State<MainExpandableNavBar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  bool _expanded = false;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -34,40 +53,61 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar> {
         },
       ),
       extendBody: true,
-      bottomNavigationBar: Stack(
-        children: [
-          Positioned(
-            height: _maxHeight,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: _cardColor,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          setState(() {
+            _expanded = !_expanded;
+          });
+          if (_expanded) {
+            _controller.reverse();
+          } else {
+            _controller.forward();
+          }
+        },
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, snapshot) {
+            final value = _controller.value;
+            return Stack(
+              children: [
+                Positioned(
+                  height: lerpDouble(_maxHeight, _minHeight, value),
+                  left: lerpDouble(0, size.width / 2 - menuWith / 2, value),
+                  width: lerpDouble(size.width, menuWith, value),
+                  bottom: lerpDouble(0, 40, value),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _cardColor,
+                      borderRadius: BorderRadius.vertical(
+                        top: const Radius.circular(20),
+                        bottom: Radius.circular(lerpDouble(0, 20, value) ?? 0),
+                      ),
+                    ),
+                    child: _expanded
+                        ? _buildExpandedContent()
+                        : _buildMenuContent(),
+                  ),
                 ),
-              ),
-              child: _buildExpandedContent(),
-            ),
-          ),
-          Positioned(
-            height: _minHeight,
-            left: size.width / 2 - menuWith / 2,
-            width: menuWith,
-            bottom: 40,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                  bottom: Radius.circular(20),
-                ),
-              ),
-              child: _buildMenuContent(),
-            ),
-          ),
-        ],
+                // Positioned(
+                //   height: _minHeight,
+                //   left: size.width / 2 - menuWith / 2,
+                //   width: menuWith,
+                //   bottom: 40,
+                //   child: Container(
+                //     decoration: const BoxDecoration(
+                //       color: Colors.red,
+                //       borderRadius: BorderRadius.vertical(
+                //         top: Radius.circular(20),
+                //         bottom: Radius.circular(20),
+                //       ),
+                //     ),
+                //     child: _buildMenuContent(),
+                //   ),
+                // ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
