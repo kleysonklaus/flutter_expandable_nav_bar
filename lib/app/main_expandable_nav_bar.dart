@@ -15,12 +15,14 @@ class MainExpandableNavBar extends StatefulWidget {
 class MainExpandableNavBarState extends State<MainExpandableNavBar> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final menuWith = MediaQuery.of(context).size.width * 0.5;
     return Scaffold(
       body: ListView.builder(
         itemCount: 5,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Container(
               height: 300,
               decoration: BoxDecoration(
@@ -39,15 +41,32 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: Container(color: _cardColor, child: _buildExpandedContent()),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: _cardColor,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              child: _buildExpandedContent(),
+            ),
           ),
-          // Positioned(
-          //   height: _maxHeight,
-          //   bottom: 40,
-          //   left: 0,
-          //   right: 0,
-          //   child: Container(color: _cardColor, child: _buildExpandedContent()),
-          // ),
+          Positioned(
+            height: _minHeight,
+            left: size.width / 2 - menuWith / 2,
+            width: menuWith,
+            bottom: 40,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: _buildMenuContent(),
+            ),
+          ),
         ],
       ),
     );
