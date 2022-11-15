@@ -79,7 +79,8 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, snapshot) {
-            final value = _controller.value;
+            final value = Curves.elasticInOut.transform(_controller.value);
+            // final value = ElasticInOutCurve(0.8).transform(_controller.value);
             return Stack(
               children: [
                 Positioned(
