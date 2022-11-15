@@ -64,7 +64,18 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
                 });
               }
             : null,
-        onVerticalDragEnd: (details) {},
+        onVerticalDragEnd: _expanded
+            ? (details) {
+                if (_currentHeight < (_maxHeight / 3)) {
+                  _controller.reverse();
+                  _expanded = false;
+                } else {
+                  _controller.forward(from: _currentHeight / _maxHeight);
+                  _expanded = true;
+                  _currentHeight = _maxHeight;
+                }
+              }
+            : null,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, snapshot) {
@@ -117,30 +128,33 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
   Widget _buildExpandedContent() {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          Container(
-            color: Colors.black,
-            height: 80,
-            width: 80,
-          ),
-          const SizedBox(height: 15),
-          const Text(
-            'Last Century',
-            style: TextStyle(fontSize: 12),
-          ),
-          const SizedBox(height: 15),
-          const Text("bloddy tear", style: TextStyle(fontSize: 20)),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              Icon(Icons.shuffle),
-              Icon(Icons.pause),
-              Icon(Icons.playlist_add),
-            ],
-          )
-        ],
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          children: [
+            Container(
+              color: Colors.black,
+              height: 80,
+              width: 80,
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              'Last Century',
+              style: TextStyle(fontSize: 12),
+            ),
+            const SizedBox(height: 15),
+            const Text("bloddy tear", style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                Icon(Icons.shuffle),
+                Icon(Icons.pause),
+                Icon(Icons.playlist_add),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
