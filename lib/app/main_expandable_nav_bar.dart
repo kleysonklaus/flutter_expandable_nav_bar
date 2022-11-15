@@ -18,6 +18,7 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _expanded = false;
+  double _currentHeight = _minHeight;
 
   @override
   void initState() {
@@ -54,16 +55,16 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
       ),
       extendBody: true,
       bottomNavigationBar: GestureDetector(
-        onTap: () {
-          setState(() {
-            _expanded = !_expanded;
-          });
-          if (_expanded) {
-            _controller.forward();
-          } else {
-            _controller.reverse();
-          }
-        },
+        onVerticalDragUpdate: _expanded
+            ? (details) {
+                setState(() {
+                  final newHeight = _currentHeight - details.delta.dy;
+                  _controller.value = _currentHeight / _maxHeight;
+                  _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
+                });
+              }
+            : null,
+        onVerticalDragEnd: (details) {},
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, snapshot) {
@@ -148,9 +149,17 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
   Widget _buildMenuContent() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: const [
+      children: [
         Icon(Icons.calendar_today_sharp),
-        Icon(Icons.calendar_today),
+        GestureDetector(
+            onTap: () {
+              setState(() {
+                _expanded = true;
+                _currentHeight = _maxHeight;
+                _controller.forward(from: 0.0);
+              });
+            },
+            child: Icon(Icons.calendar_today)),
         Icon(Icons.calendar_today_sharp),
       ],
     );
