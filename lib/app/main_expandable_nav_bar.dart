@@ -22,7 +22,7 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
   @override
   void initState() {
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 800));
+        vsync: this, duration: const Duration(milliseconds: 600));
     super.initState();
   }
 
@@ -59,9 +59,9 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
             _expanded = !_expanded;
           });
           if (_expanded) {
-            _controller.reverse();
-          } else {
             _controller.forward();
+          } else {
+            _controller.reverse();
           }
         },
         child: AnimatedBuilder(
@@ -71,16 +71,16 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
             return Stack(
               children: [
                 Positioned(
-                  height: lerpDouble(_maxHeight, _minHeight, value),
-                  left: lerpDouble(0, size.width / 2 - menuWith / 2, value),
-                  width: lerpDouble(size.width, menuWith, value),
-                  bottom: lerpDouble(0, 40, value),
+                  height: lerpDouble(_minHeight, _maxHeight, value),
+                  left: lerpDouble(size.width / 2 - menuWith / 2, 0, value),
+                  width: lerpDouble(menuWith, size.width, value),
+                  bottom: lerpDouble(40, 0, value),
                   child: Container(
                     decoration: BoxDecoration(
                       color: _cardColor,
                       borderRadius: BorderRadius.vertical(
                         top: const Radius.circular(20),
-                        bottom: Radius.circular(lerpDouble(0, 20, value) ?? 0),
+                        bottom: Radius.circular(lerpDouble(20, 0, value) ?? 0),
                       ),
                     ),
                     child: _expanded
