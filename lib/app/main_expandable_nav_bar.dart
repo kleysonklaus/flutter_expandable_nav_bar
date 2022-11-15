@@ -66,7 +66,7 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
             : null,
         onVerticalDragEnd: _expanded
             ? (details) {
-                if (_currentHeight < (_maxHeight / 3)) {
+                if (_currentHeight < (_maxHeight / 2)) {
                   _controller.reverse();
                   _expanded = false;
                 } else {
@@ -81,11 +81,11 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
           builder: (context, snapshot) {
             // final value = Curves.elasticInOut.transform(_controller.value);
             final value =
-                const ElasticInOutCurve(0.8).transform(_controller.value);
+                const ElasticInOutCurve(0.7).transform(_controller.value);
             return Stack(
               children: [
                 Positioned(
-                  height: lerpDouble(_minHeight, _maxHeight, value),
+                  height: lerpDouble(_minHeight, _currentHeight, value),
                   left: lerpDouble(size.width / 2 - menuWith / 2, 0, value),
                   width: lerpDouble(menuWith, size.width, value),
                   bottom: lerpDouble(40, 0, value),
@@ -98,7 +98,10 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
                       ),
                     ),
                     child: _expanded
-                        ? _buildExpandedContent()
+                        ? Opacity(
+                            opacity: _controller.value,
+                            child: _buildExpandedContent(),
+                          )
                         : _buildMenuContent(),
                   ),
                 ),
