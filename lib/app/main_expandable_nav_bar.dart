@@ -33,4 +33,48 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar> {
       ),
     );
   }
+
+  /// contenido para cuando se expande
+  Widget _buildExpandedContent() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Container(
+            color: Colors.black,
+            height: 80,
+            width: 80,
+          ),
+          const SizedBox(height: 15),
+          const Text(
+            'Last Century',
+            style: TextStyle(fontSize: 12),
+          ),
+          const SizedBox(height: 15),
+          const Text("bloddy tear", style: TextStyle(fontSize: 20)),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              Icon(Icons.shuffle),
+              Icon(Icons.pause),
+              Icon(Icons.playlist_add),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  /// contenido del menu
+  Widget _buildMenuContent() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: const [
+        Icon(Icons.calendar_today_sharp),
+        Icon(Icons.calendar_today),
+        Icon(Icons.calendar_today_sharp),
+      ],
+    );
+  }
 }
