@@ -6,39 +6,43 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Expandable Nav Bar',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Expandable Nav Bar'),
+      home: const _MainExpandableNavBar(title: 'Flutter Expandable Nav Bar'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class _MainExpandableNavBar extends StatefulWidget {
+  const _MainExpandableNavBar({Key? key, required this.title})
+      : super(key: key);
   final String title;
 
   @override
+  State<_MainExpandableNavBar> createState() => _MainExpandableNavBarState();
+}
+
+class _MainExpandableNavBarState extends State<_MainExpandableNavBar> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              'You have pushed the button this many times:',
+      body: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.all(20),
+            child: Container(
+              height: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.primaries[index % Colors.primaries.length],
+              ),
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+          );
+        },
       ),
     );
   }
