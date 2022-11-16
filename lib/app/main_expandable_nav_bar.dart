@@ -49,11 +49,14 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
               return Padding(
                 padding: const EdgeInsets.all(20),
                 // container image .asset
-                child: Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.primaries[index % Colors.primaries.length],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.primaries[index % Colors.primaries.length],
+                    ),
                   ),
                 ),
               );
