@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'music.dart';
 
 const _cardColor = Color(0xFF5F40FB);
 const _maxHeight = 350.0;
@@ -44,8 +45,10 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
             padding: const EdgeInsets.only(bottom: _minHeight),
             itemCount: 5,
             itemBuilder: (context, index) {
+              final music = musics[index];
               return Padding(
                 padding: const EdgeInsets.all(20),
+                // container image .asset
                 child: Container(
                   height: 300,
                   decoration: BoxDecoration(
