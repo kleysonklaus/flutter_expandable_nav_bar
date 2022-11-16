@@ -12,4 +12,14 @@ class Music {
   });
 }
 
-final _assetPath = 'assets/expandable_nav_bar';
+final _assetPath = 'assets/expandable_nav_bar/';
+
+final musics = List.generate(
+  4,
+  (index) => Music(
+    singer: 'Singer ${index + 1}',
+    name: 'Song name ${index + 1}',
+    backGroundImage: '${_assetPath}img${index + 1}.png',
+    singerImage: '${_assetPath}person${index + 1}.png',
+  ),
+);
