@@ -42,22 +42,40 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
       body: Stack(
         children: [
           ListView.builder(
-            padding: const EdgeInsets.only(bottom: _minHeight),
+            padding: const EdgeInsets.only(
+                bottom: _minHeight + 20, left: 20, right: 20),
             itemCount: 5,
             itemBuilder: (context, index) {
               final music = musics[index];
               return Padding(
                 padding: const EdgeInsets.all(20),
                 // container image .asset
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    height: 300,
-                    decoration: BoxDecoration(
+                child: Stack(
+                  children: [
+                    ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.primaries[index % Colors.primaries.length],
+                      child: Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color:
+                              Colors.primaries[index % Colors.primaries.length],
+                        ),
+                      ),
                     ),
-                  ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.red,
+                          maxRadius: 20,
+                        ),
+                        Text(music.singer),
+                        Text(music.name),
+                      ],
+                    )
+                  ],
                 ),
               );
             },
