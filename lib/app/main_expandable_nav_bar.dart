@@ -20,6 +20,7 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
   late AnimationController _controller;
   bool _expanded = false;
   double _currentHeight = _minHeight;
+  late Music _currentMusic;
 
   @override
   void initState() {
@@ -47,35 +48,60 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
             itemCount: 5,
             itemBuilder: (context, index) {
               final music = musics[index];
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                // container image .asset
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: 300,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color:
-                              Colors.primaries[index % Colors.primaries.length],
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _currentMusic = music;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  // container image .asset
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors
+                                .primaries[index % Colors.primaries.length],
+                          ),
                         ),
                       ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.red,
-                          maxRadius: 20,
+                      Positioned.fill(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.red,
+                                maxRadius: 20,
+                              ),
+                              SizedBox(height: 20),
+                              Text(
+                                _currentMusic.singer,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                _currentMusic.name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(music.singer),
-                        Text(music.name),
-                      ],
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -173,12 +199,12 @@ class MainExpandableNavBarState extends State<MainExpandableNavBar>
               width: 80,
             ),
             const SizedBox(height: 15),
-            const Text(
-              'Last Century',
+            Text(
+              _currentMusic.singer,
               style: TextStyle(fontSize: 12),
             ),
             const SizedBox(height: 15),
-            const Text("bloddy tear", style: TextStyle(fontSize: 20)),
+            Text(_currentMusic.name, style: TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
